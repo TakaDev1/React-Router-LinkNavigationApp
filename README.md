@@ -1,32 +1,151 @@
-# React + TypeScript + Vite
+# React Router Link Navigation App
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React Routerの`Link`を使用して、`Home`と`About`のページを移動できるナビゲーションを実装する練習アプリです。
 
-Currently, two official plugins are available:
+## 概要
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+`Link`コンポーネントを使用して、URLを変更しながら`Home`と`About`を行き来できるようにします。
 
-## React Compiler
+| URL      | ページ   |
+| -------- | ----- |
+| `/`      | Home  |
+| `/about` | About |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 学習内容
 
-## Expanding the Oxlint configuration
+* `Link`の使い方
+* `to`属性による遷移先の指定
+* React Routerによるページ遷移
+* `<a>`タグとの違い
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 条件
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+* `/` → `Home`
+* `/about` → `About`
+* `Link`を使用する
+* `Home`へのリンクを作成する
+* `About`へのリンクを作成する
+* `<a>`タグは使用しない
+
+## ディレクトリ構成
+
+```text
+src/
+├── components/
+│   └── Navigation.tsx
+├── pages/
+│   ├── Home.tsx
+│   └── About.tsx
+├── App.tsx
+└── main.tsx
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## 実装例
+
+### Navigation.tsx
+
+```tsx
+import { Link } from "react-router";
+
+const Navigation = () => {
+  return (
+    <nav>
+      <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
+    </nav>
+  );
+};
+
+export default Navigation;
+```
+
+### App.tsx
+
+```tsx
+import { BrowserRouter, Route, Routes } from "react-router";
+import About from "./pages/About";
+import Home from "./pages/Home";
+import Navigation from "./components/Navigation";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Navigation />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+## `Link`の基本
+
+`Link`の`to`属性に遷移先のURLを指定します。
+
+```tsx
+<Link to="/">Home</Link>
+<Link to="/about">About</Link>
+```
+
+それぞれ、
+
+```text
+Home  → /
+About → /about
+```
+
+へ遷移します。
+
+## `<a>`タグを使用しない理由
+
+React Routerでは、アプリ内のページ遷移に`Link`を使用します。
+
+```tsx
+<Link to="/about">About</Link>
+```
+
+一方、通常の`<a>`タグは、
+
+```tsx
+<a href="/about">About</a>
+```
+
+のように使用します。
+
+React RouterによるSPAのルーティングでは、基本的に`Link`を使用してページ遷移を行います。
+
+## 実行
+
+```bash
+npm install
+npm run dev
+```
+
+ブラウザで以下にアクセスします。
+
+```text
+http://localhost:5173/
+```
+
+`Home`から`About`へ移動し、さらに`About`から`Home`へ戻れることを確認してください。
+
+## 課題のポイント
+
+この課題では、React Routerにおける基本的なナビゲーションを理解することを目的とします。
+
+```text
+Navigation
+    ↓
+Link
+    ↓
+URL変更
+    ↓
+Routes
+    ↓
+対応するページを表示
+```
